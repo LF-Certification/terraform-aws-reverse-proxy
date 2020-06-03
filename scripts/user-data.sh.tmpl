@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -xeuf -o pipefail
+# vim: set filetype=sh
+
+hostnamectl set-hostname reverse-proxy
+
+GREP_STATUS_CODE=1
+
+until $${GREP_STATUS_CODE} -eq 0; do
+  echo "Waiting to resolve hosts DNS"
+  dig +short "${alias}" @8.8.8.8 | grep "${hostname}"
+  GREP_STATUS_CODE=$?
+  sleep 20
+done
+
+# This alias record exists so a certbot validation will succeed because the hostname scheme chosen
+# will exceeded the allowed 64 character limit:
+# https://community.letsencrypt.org/t/ssl-for-a-63-character-max-number-of-characters-domain-name-s/36387/20
+#
+# Ensure the alias is specified first so validations succeed.
+certbot --nginx -d '${alias}' -d '${hostname}' -n --no-redirect --agree-tos --email '${certbot_email}'
+
+cat <<EOF > /etc/nginx/sites-enabled/webterminal
+server {
+    listen      443 ssl;
+    server_name ${hostname};
+
+    ssl_certificate        /etc/letsencrypt/live/${alias}/cert.pem;
+    ssl_certificate_key    /etc/letsencrypt/live/${alias}/privkey.pem;
+    ssl_client_certificate /etc/letsencrypt/live/${alias}/chain.pem;
+    ssl_verify_client      optional;
+
+    location / {
+        proxy_pass http://${target_ip}:8080/;
+        proxy_http_version  1.1;
+        proxy_set_header    Upgrade \$http_upgrade;
+        proxy_set_header    Connection "upgrade";
+        proxy_set_header    Host \$http_host;
+        proxy_set_header    X-Real-IP \$remote_addr;
+   }
+}
+EOF
+
+rm /etc/nginx/sites-enabled/default
+
+systemctl reload nginx
