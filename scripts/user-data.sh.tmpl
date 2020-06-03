@@ -7,7 +7,7 @@ hostnamectl set-hostname reverse-proxy
 
 GREP_STATUS_CODE=1
 
-until $${GREP_STATUS_CODE} -eq 0; do
+until [ $${GREP_STATUS_CODE} -eq 0 ]; do
   echo "Waiting to resolve hosts DNS"
   dig +short "${alias}" @8.8.8.8 | grep "${hostname}"
   GREP_STATUS_CODE=$?
