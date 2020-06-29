@@ -40,6 +40,10 @@
 locals {
   hostname = "${var.instance_hostname}.${var.instance_domain}"
   alias    = "${var.instance_alias}.${var.instance_domain}"
+
+  tags = {
+    "Role" = "reverse-proxy"
+  }
 }
 
 resource "aws_instance" "default" {
@@ -51,7 +55,7 @@ resource "aws_instance" "default" {
   subnet_id              = var.instance_subnet_id
   user_data              = data.template_file.init.rendered
 
-  tags = var.tags
+  tags = merge(var.tags, local.tags)
 }
 
 resource "aws_route53_record" "default" {
