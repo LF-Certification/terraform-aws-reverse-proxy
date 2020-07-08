@@ -11,9 +11,7 @@ data "aws_ami" "default" {
 data "template_file" "init" {
   template = "${file("${path.module}/scripts/user-data.sh.tmpl")}"
   vars = {
-    hostname      = local.hostname
-    alias         = local.alias
-    target_ip     = var.target_ip
-    certbot_email = var.certbot_email
+    hostname  = local.hostname
+    target_ip = var.target_ip
   }
 }
