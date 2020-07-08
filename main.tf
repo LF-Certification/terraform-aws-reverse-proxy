@@ -39,10 +39,10 @@
 
 locals {
   hostname = "${var.instance_hostname}.${var.instance_domain}"
-  alias    = "${var.instance_alias}.${var.instance_domain}"
 
   tags = {
     "Role" = "reverse-proxy"
+    "Name" = var.instance_hostname
   }
 }
 
@@ -64,15 +64,4 @@ resource "aws_route53_record" "default" {
   type    = "A"
   ttl     = "30"
   records = [aws_instance.default.public_ip]
-}
-
-# This alias record exists so a certbot validation will succeed because the hostname scheme chosen
-# exceeded the allowed 64 character limit:
-# https://community.letsencrypt.org/t/ssl-for-a-63-character-max-number-of-characters-domain-name-s/36387/20
-resource "aws_route53_record" "alias" {
-  zone_id = var.instance_domain_zone_id
-  name    = local.alias
-  type    = "CNAME"
-  ttl     = "30"
-  records = [local.hostname]
 }
