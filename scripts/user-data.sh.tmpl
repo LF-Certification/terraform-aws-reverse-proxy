@@ -24,7 +24,7 @@ server {
 
     location / {
 
-        if ($http_host != "${hostname}") {
+        if (\$http_host != "${hostname}") {
             return 401;
         }
 
