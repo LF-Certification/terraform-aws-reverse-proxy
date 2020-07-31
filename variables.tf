@@ -3,16 +3,8 @@ variable "tags" {
   type        = map
 }
 
-variable "certbot_email" {
-  description = "The email of the certbot account"
-}
-
 variable "instance_hostname" {
   description = "The preferred hostname of the reverse proxy node, will have instance_domain appeneded."
-}
-
-variable "instance_alias" {
-  description = "The alias of the reverse proxy node, will have instance_domain appeneded."
 }
 
 variable "instance_key_name" {

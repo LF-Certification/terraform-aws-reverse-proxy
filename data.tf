@@ -15,3 +15,7 @@ data "template_file" "init" {
     target_ip = var.target_ip
   }
 }
+
+data "aws_route53_zone" "instance" {
+  zone_id = var.instance_domain_zone_id
+}

@@ -1,15 +1,14 @@
 /**
 * # Reverse Proxy
 *
-* A very basic module to help deploy a reverse proxy. Really only useful with select specific AMIs.
+* A very basic module to help deploy a reverse proxy.
 *
 * Packages required are:
+*  - Ubuntu18 or 20 AMI
 *  - Nginx
 *  - Certbot
 *
 * This module will:
-*   * Deploy a reverse proxy ec2 instance (nginx) to offload SSL traffic for an exam.
-*   * Generate a lets encrypt certificate and install it.
 *   * Configure Nginx on boot.
 *   * Setup DNS entries for the reverse proxy using the partner_resid.
 *
@@ -26,9 +25,8 @@
 *    instance_key_name        = "booboo"
 *    instance_subnet_id       = random_shuffle.subnet.result[0]
 *    instance_security_groups = [aws_security_group.public.id]
-*    instance_domain_zone_id  = data.aws_route53_zone.selected.zone_id
+*    instance_route53_zone_id  = data.aws_route53_zone.selected.zone_id
 *    instance_domain          = local.instance_domain
-*    certbot_email            = "email@example.org"
 *
 *    tags = local.tags
 *  }
@@ -38,7 +36,8 @@
 */
 
 locals {
-  hostname = "${var.instance_hostname}.${var.instance_domain}"
+  domain_name = substr(data.aws_route53_zone.instance.name, 0, -1)
+  hostname    = "${var.instance_hostname}.${local.domain_name}"
 
   tags = {
     "Role" = "reverse-proxy"
