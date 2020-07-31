@@ -14,8 +14,13 @@ variable "instance_key_name" {
 }
 
 variable "instance_subnet_id" {
-  description = "The subnet the instance will be deployed too."
+  description = "The VPC subnet the instance will be deployed too."
 }
+
+variable "instance_vpc_id" {
+  description = "The VPC where the reverse proxy instance will be deployed."
+}
+
 variable "instance_domain_zone_id" {
   description = "The Route53 zone where a DNS entry will be created for accessing the instance."
 }
@@ -27,8 +32,18 @@ variable "instance_domain" {
 variable "instance_security_groups" {
   description = "A list of security groups applied to the reverse proxy EC2 instance."
   type        = list
+  default     = []
 }
 
 variable "target_ip" {
   description = "The IP of the node hosting the terminal or IDE where offloaded HTTP connections will be forwarded."
+}
+
+variable "target_ingress_rule_security_group_id" {
+  description = "This module will grant itself access to the upstream instance by creating an ingress against this security group ID."
+}
+
+variable "target_ingress_rule_target_port" {
+  description = "The TCP port number to grant access. Usually 8080 when forwarding HTTP requests."
+  default     = 8080
 }
