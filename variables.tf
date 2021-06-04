@@ -13,6 +13,12 @@ variable "instance_key_name" {
   type        = string
 }
 
+variable "instance_type" {
+  description = "The EC2 instance type"
+  default     = "t3.micro"
+  type        = string
+}
+
 variable "instance_subnet_id" {
   description = "The VPC subnet the instance will be deployed too."
 }
@@ -46,4 +52,10 @@ variable "target_ingress_rule_security_group_id" {
 variable "target_ingress_rule_target_port" {
   description = "The TCP port number to grant access. Usually 8080 when forwarding HTTP requests."
   default     = 8080
+}
+
+variable "desktop_enabled" {
+  description = "This will enabled the proxy config to use Gucamole -> VNC -> Desktop presentation layer"
+  default     = false
+  type        = bool
 }

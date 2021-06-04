@@ -6,7 +6,6 @@
 * Packages required are:
 *  - Ubuntu18 or 20 AMI
 *  - Nginx
-*  - Certbot
 *
 * This module will:
 *   * Configure Nginx on boot.
@@ -40,15 +39,14 @@ locals {
   hostname    = "${var.instance_hostname}.${local.domain_name}"
 
   tags = {
-    "Role" = "reverse-proxy"
-    "Name" = var.instance_hostname
+    Role = "reverse-proxy"
+    Name = var.instance_hostname
   }
 }
 
 resource "aws_instance" "default" {
-  #TODO(pmyjavec) lookup dynamically
   ami                    = data.aws_ami.default.id
-  instance_type          = "t3.micro"
+  instance_type          = var.instance_type
   key_name               = var.instance_key_name
   vpc_security_group_ids = concat([aws_security_group.default.id], var.instance_security_groups)
   subnet_id              = var.instance_subnet_id

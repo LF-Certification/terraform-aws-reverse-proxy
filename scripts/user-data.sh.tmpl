@@ -1,105 +1,35 @@
 #!/usr/bin/env bash
 
 set -xeuf -o pipefail
-# vim: set filetype=sh
 
 hostnamectl set-hostname reverse-proxy
 
-cat <<EOF > /etc/nginx/sites-enabled/webterminal
-server {
-    listen      443 ssl;
-    server_name ${hostname};
+SITES="certerminal guacamole"
 
-    ssl_certificate        /etc/ssl/server.crt;
-    ssl_certificate_key    /etc/ssl/private.key;
-    ssl_client_certificate /etc/ssl/bundle.pem;
-    ssl_verify_client      optional;
+for SITE in $SITES; do
+  sed -i "s/___HOSTNAME___/${hostname}/g" /etc/nginx/sites-available/$SITE
+  sed -i "s/___TARGET_IP___/${target_ip}/g" /etc/nginx/sites-available/$SITE
+done
 
-    location = /error.html {
-      ssi on;
-      internal;
-      auth_basic off;
-      root /var/www/error;
-    }
+# Configuring Certerminal
+ln -s /etc/nginx/sites-available/certerminal /etc/nginx/sites-enabled/proxy
+systemctl start nginx
 
-    location / {
+# Desktop config
+DESKTOP_ENABLED="${desktop_enabled}"
 
-        if (\$http_host != "${hostname}") {
-            return 401;
-        }
+if [[ "$DESKTOP_ENABLED" == "true" ]]; then
+  GUACAMOLE_USERS_FILE="/etc/guacamole/user-mapping.xml"
 
-        proxy_pass http://${target_ip}:8080/;
-        proxy_http_version  1.1;
-        proxy_intercept_errors on;
-        proxy_set_header    Upgrade \$http_upgrade;
-        proxy_set_header    Connection "upgrade";
-        proxy_set_header    Host \$http_host;
-        proxy_set_header    X-Real-IP \$remote_addr;
-   }
-}
+  sed -i "s/___TARGET_IP___/${target_ip}/g" $GUACAMOLE_USERS_FILE
+  sed -i "s/___TARGET_PORT___/${target_port}/g" $GUACAMOLE_USERS_FILE
+  sed -i "s/___VNC_PASSWORD___/${vnc_password}/g" $GUACAMOLE_USERS_FILE
 
-map \$status \$status_text {
-  400 'Bad Request';
-  401 'Unauthorized';
-  402 'Payment Required';
-  403 'Forbidden';
-  404 'Not Found';
-  405 'Method Not Allowed';
-  406 'Not Acceptable';
-  407 'Proxy Authentication Required';
-  408 'Request Timeout';
-  409 'Conflict';
-  410 'Gone';
-  411 'Length Required';
-  412 'Precondition Failed';
-  413 'Payload Too Large';
-  414 'URI Too Long';  415 'Unsupported Media Type';
-  416 'Range Not Satisfiable';
-  417 'Expectation Failed';
-  418 'I\'m a teapot';
-  421 'Misdirected Request';
-  422 'Unprocessable Entity';
-  423 'Locked';
-  424 'Failed Dependency';
-  425 'Too Early';
-  426 'Upgrade Required';
-  428 'Precondition Required';
-  429 'Too Many Requests';
-  431 'Request Header Fields Too Large';
-  451 'Unavailable For Legal Reasons';
-  500 'Internal Server Error';
-  501 'Not Implemented';
-  502 'Bad Gateway';
-  503 'Service Unavailable';
-  504 'Gateway Timeout';
-  505 'HTTP Version Not Supported';
-  506 'Variant Also Negotiates';
-  507 'Insufficient Storage';
-  508 'Loop Detected';
-  510 'Not Extended';
-  511 'Network Authentication Required';
-  default 'Something is wrong';
-}
+  systemctl start guacd
+  systemctl start tomcat9
 
-error_page 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 415 416 417 418 421 422 423 424 425 426 428 429 431 451 500 501 502 503 504 505 506 507 508 510 511 /error.html;
-EOF
-
-mkdir /var/www/error/ -p
-
-cat <<EOF > /var/www/error/error.html
-<!DOCTYPE html><meta charset="utf-8" /><title>Error Page</title><meta content="width=device-width,initial-scale=1" name="viewport" /><meta content="10" http-equiv="refresh" />
-<style>
-    h2, p {
-        color: #000;
-        font-family: Arial, Helvetica, sans-serif;
-        margin-left: 2%;
-    }
-</style>
-<h2>
-    <!--# echo var="status" default="" --> <!--# echo var="status_text" default="Something goes wrong" -->
-</h2>
-EOF
-
-rm /etc/nginx/sites-enabled/default
-
-systemctl reload nginx
+  # Guacamole nginx config
+  rm /etc/nginx/sites-enabled/proxy
+  ln -s /etc/nginx/sites-available/guacamole /etc/nginx/sites-enabled/proxy
+  systemctl reload nginx
+fi

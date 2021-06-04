@@ -4,7 +4,6 @@ A very basic module to help deploy a reverse proxy. Really only useful with sele
 
 Packages required are:
  - Nginx
- - Certbot
 
 This module will:
   * Deploy a reverse proxy ec2 instance (nginx) to offload SSL traffic for an exam.
