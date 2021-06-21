@@ -26,4 +26,8 @@ if [[ "$DESKTOP_ENABLED" == "true" ]]; then
   rm /etc/nginx/sites-enabled/proxy
   ln -s /etc/nginx/sites-available/guacamole /etc/nginx/sites-enabled/proxy
   systemctl reload nginx
+
+  # The guacamole config for VNC stores the VNC hostname as "vnc_server"
+  # So, we update the entry in hosts file at runtime
+  sed -i "s/___TARGET_IP___/${target_ip}/g" /etc/hosts
 fi
