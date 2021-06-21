@@ -19,12 +19,6 @@ systemctl start nginx
 DESKTOP_ENABLED="${desktop_enabled}"
 
 if [[ "$DESKTOP_ENABLED" == "true" ]]; then
-  GUACAMOLE_USERS_FILE="/etc/guacamole/user-mapping.xml"
-
-  sed -i "s/___TARGET_IP___/${target_ip}/g" $GUACAMOLE_USERS_FILE
-  sed -i "s/___TARGET_PORT___/${target_port}/g" $GUACAMOLE_USERS_FILE
-  sed -i "s/___VNC_PASSWORD___/${vnc_password}/g" $GUACAMOLE_USERS_FILE
-
   systemctl start guacd
   systemctl start tomcat9
 
