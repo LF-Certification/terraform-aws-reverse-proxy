@@ -35,7 +35,7 @@
 */
 
 locals {
-  domain_name = replace(data.aws_route53_zone.instance.name, "/\.$/", "")
+  domain_name = replace(data.aws_route53_zone.instance.name, "/\\.$/", "")
   hostname    = "${var.instance_hostname}.${local.domain_name}"
 
   tags = {
@@ -47,7 +47,7 @@ locals {
 resource "aws_iam_role" "default" {
   # TODO(pablo) Re-using the instance_hostname variable
   # to ensure a unique role name
-  name = var.instance_hostname
+  name               = var.instance_hostname
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
