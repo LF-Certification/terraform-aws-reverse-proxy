@@ -35,7 +35,7 @@
 */
 
 locals {
-  domain_name = substr(data.aws_route53_zone.instance.name, 0, -1)
+  domain_name = replace(data.aws_route53_zone.instance.name, "/\.$/", "")
   hostname    = "${var.instance_hostname}.${local.domain_name}"
 
   tags = {
