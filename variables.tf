@@ -45,12 +45,12 @@ variable "target_ip" {
   description = "The IP of the node hosting the terminal or IDE where offloaded HTTP connections will be forwarded."
 }
 
-variable "target_ingress_rule_security_group_id" {
-  description = "This module will grant itself access to the upstream instance by creating an ingress against this security group ID."
+variable "target_security_group_id" {
+  description = "Used to grant the reverse proxy access to a target"
 }
 
-variable "target_ingress_rule_target_port" {
-  description = "The TCP port number to grant access. Usually 8080 when forwarding HTTP requests."
+variable "target_service_port" {
+  description = "The TCP port which the target service is listening on"
   default     = 8080
 }
 

@@ -48,7 +48,7 @@ resource "aws_instance" "default" {
   ami                    = data.aws_ami.default.id
   instance_type          = var.instance_type
   key_name               = var.instance_key_name
-  vpc_security_group_ids = concat([aws_security_group.default.id], var.instance_security_groups)
+  vpc_security_group_ids = [aws_security_group.this.id]
   subnet_id              = var.instance_subnet_id
   user_data              = data.template_file.init.rendered
 
@@ -63,7 +63,7 @@ resource "aws_route53_record" "default" {
   records = [aws_instance.default.public_ip]
 }
 
-resource "aws_security_group" "default" {
+resource "aws_security_group" "this" {
   name_prefix = "reverse-proxy"
   vpc_id      = var.instance_vpc_id
 
@@ -91,11 +91,12 @@ resource "aws_security_group" "default" {
   tags = local.tags
 }
 
+# This rule is appended to the reservation instance to allow
 resource "aws_security_group_rule" "target" {
   type                     = "ingress"
-  from_port                = var.target_ingress_rule_target_port
-  to_port                  = var.target_ingress_rule_target_port
+  from_port                = var.target_service_port
+  to_port                  = var.target_service_port
   protocol                 = "tcp"
-  security_group_id        = var.target_ingress_rule_security_group_id
-  source_security_group_id = aws_security_group.default.id
+  security_group_id        = var.target_security_group_id
+  source_security_group_id = aws_security_group.this.id
 }
