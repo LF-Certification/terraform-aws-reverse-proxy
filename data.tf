@@ -14,7 +14,7 @@ data "template_file" "init" {
   vars = {
     hostname        = local.hostname
     target_ip       = var.target_ip
-    target_port     = var.target_ingress_rule_target_port
+    target_port     = var.target_service_port
     vnc_password    = "password"
     desktop_enabled = var.desktop_enabled
     ssm_ssl_path    = var.ssm_ssl_path
