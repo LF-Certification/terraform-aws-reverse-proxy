@@ -32,7 +32,7 @@ if [[ "$DESKTOP_ENABLED" == "true" ]]; then
   systemctl start guacd
   systemctl start tomcat9
 
-  # Guacamole nginx config
+  # Guacamole nginx config
   rm /etc/nginx/sites-enabled/proxy
   ln -s /etc/nginx/sites-available/guacamole /etc/nginx/sites-enabled/proxy
   systemctl reload nginx
