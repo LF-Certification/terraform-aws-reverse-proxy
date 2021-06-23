@@ -4,6 +4,16 @@ set -xeuf -o pipefail
 
 hostnamectl set-hostname reverse-proxy
 
+### SSL Nginx config
+SSM_SSL_PATH="${ssm_ssl_path}"
+SSL_FILES="bundle.pem server.crt private.key"
+
+for SSL_FILE in $SSL_FILES; do
+  LOCAL_FILE="/etc/ssl/$SSL_FILE"
+  aws ssm get-parameters --region us-west-2 --names $SSM_SSL_PATH/$SSL_FILE --with-decryption|jq -r '.Parameters[0].Value' > $LOCAL_FILE
+  chmod 0600 $LOCAL_FILE
+done
+
 SITES="certerminal guacamole"
 
 for SITE in $SITES; do

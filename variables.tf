@@ -64,3 +64,9 @@ variable "desktop_enabled" {
   default     = false
   type        = bool
 }
+
+variable "ssm_ssl_path" {
+  description = "SSM Base path for Nginx SSL files"
+  default     = "/LF/Certification/reverse-proxy/SSL"
+  type        = string
+}

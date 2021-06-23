@@ -17,9 +17,12 @@ data "template_file" "init" {
     target_port     = var.target_ingress_rule_target_port
     vnc_password    = "password"
     desktop_enabled = var.desktop_enabled
+    ssm_ssl_path    = var.ssm_ssl_path
   }
 }
 
 data "aws_route53_zone" "instance" {
   zone_id = var.instance_domain_zone_id
 }
+
+data "aws_caller_identity" "current" {}
