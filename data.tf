@@ -4,7 +4,7 @@ data "aws_ami" "default" {
 
   filter {
     name   = "name"
-    values = ["reverse-proxy2-${ami_version_filter}"]
+    values = ["reverse-proxy2-${var.ami_version_filter}"]
   }
 }
 
