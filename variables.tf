@@ -3,6 +3,11 @@ variable "tags" {
   type        = map
 }
 
+variable "ami_version_filter" {
+  description = "The filter for locating the ami to run (e.g.  reverse-proxy2-<VERSION>)"
+  default     = "master-*"
+}
+
 variable "instance_hostname" {
   description = "The preferred hostname of the reverse proxy node, will have instance_domain appeneded."
 }
