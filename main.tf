@@ -68,7 +68,9 @@ EOF
 }
 
 resource "aws_iam_policy" "ssm" {
-  name        = "ssm-ssl-read"
+  # TODO(pablo) Re-using the instance_hostname variable
+  # to ensure a unique policy name
+  name        = var.instance_hostname
   path        = "/"
   description = "Nginx SSL Files"
 
