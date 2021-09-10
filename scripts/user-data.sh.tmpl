@@ -15,6 +15,7 @@ for SSL_FILE in $SSL_FILES; do
     aws ssm get-parameters --region us-west-2 --names $SSM_SSL_PATH/$SSL_FILE --with-decryption | jq -r '.Parameters[0].Value' > $LOCAL_FILE
     if [ -s $LOCAL_FILE ]; then
       chmod 0600 $LOCAL_FILE
+      break
     else
       sleep 20
     fi
