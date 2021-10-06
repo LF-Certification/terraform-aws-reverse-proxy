@@ -47,7 +47,6 @@ locals {
 resource "aws_iam_role" "default" {
   # TODO(pablo) Re-using the instance_hostname variable
   # to ensure a unique role name
-  name_prefix        = var.instance_hostname
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -65,14 +64,18 @@ resource "aws_iam_role" "default" {
   ]
 }
 EOF
+
+  tags = merge(var.tags, local.tags)
 }
 
 resource "aws_iam_policy" "ssm" {
   # TODO(pablo) Re-using the instance_hostname variable
   # to ensure a unique policy name
-  name_prefix = var.instance_hostname
   path        = "/"
   description = "Nginx SSL Files"
+
+  tags = merge(var.tags, local.tags)
+
 
   policy = <<EOF
 {
@@ -114,8 +117,9 @@ resource "aws_iam_role_policy_attachment" "default" {
 resource "aws_iam_instance_profile" "default" {
   # TODO(pablo) Re-using the instance_hostname variable
   # to ensure a unique instance profile name
-  name = var.instance_hostname
   role = aws_iam_role.default.name
+
+  tags = merge(var.tags, local.tags)
 }
 
 resource "aws_instance" "default" {
@@ -139,7 +143,6 @@ resource "aws_route53_record" "default" {
 }
 
 resource "aws_security_group" "this" {
-  name_prefix = "reverse-proxy"
   vpc_id      = var.instance_vpc_id
 
   ingress {
@@ -163,7 +166,7 @@ resource "aws_security_group" "this" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = local.tags
+  tags = merge(var.tags, local.tags)
 }
 
 # This rule is appended to the reservation instance to allow
