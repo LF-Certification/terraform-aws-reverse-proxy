@@ -47,7 +47,7 @@ locals {
 resource "aws_iam_role" "default" {
   # TODO(pablo) Re-using the instance_hostname variable
   # to ensure a unique role name
-  name               = var.instance_hostname
+  name_prefix        = var.instance_hostname
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -70,7 +70,7 @@ EOF
 resource "aws_iam_policy" "ssm" {
   # TODO(pablo) Re-using the instance_hostname variable
   # to ensure a unique policy name
-  name        = var.instance_hostname
+  name_prefix = var.instance_hostname
   path        = "/"
   description = "Nginx SSL Files"
 
