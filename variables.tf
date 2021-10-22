@@ -70,3 +70,8 @@ variable "ssm_ssl_path" {
   default     = "/LF/Certification/reverse-proxy/SSL"
   type        = string
 }
+
+variable "instance_profile" {
+    description = "The AWS EC2 instance profile ARN to use to the instance."
+    type        = string
+}
