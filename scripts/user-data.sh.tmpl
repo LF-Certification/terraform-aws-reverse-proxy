@@ -2,7 +2,7 @@
 
 set -xeuf -o pipefail
 
-hostnamectl set-hostname reverse-proxy
+hostnamectl set-hostname reverse-proxy-${partner_resid}
 
 ### SSL Nginx config
 SSM_SSL_PATH="${ssm_ssl_path}"
@@ -48,4 +48,13 @@ if [[ "$DESKTOP_ENABLED" == "true" ]]; then
   # The guacamole config for VNC stores the VNC hostname as "vnc_server"
   # So, we update the entry in hosts file at runtime
   sed -i "s/___TARGET_IP___/${target_ip}/g" /etc/hosts
+fi
+
+# Datadog
+
+if [[ "${datadog_enabled}" == "true" ]]; then
+  sed -i "s/___ENVIRONMENT___/${environment}/g" /etc/datadog-agent/datadog.yaml
+  sed -i "s/___PARTNER_RESID___/${partner_resid}/g" /etc/datadog-agent/datadog.yaml
+
+  systemctl start datadog-agent
 fi

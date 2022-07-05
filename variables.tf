@@ -75,3 +75,19 @@ variable "instance_profile" {
     description = "The AWS EC2 instance profile ARN to use to the instance."
     type        = string
 }
+
+variable "environment" {
+    description = "Environment"
+    type        = string
+}
+
+variable "partner_resid" {
+    description = "The reservation PARTNER_RESID"
+    type        = string
+}
+
+variable "datadog_enabled" {
+    description = "Enable/Disable Datadog agent"
+    type        = bool
+    default     = false
+}

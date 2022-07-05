@@ -12,11 +12,14 @@ data "template_file" "init" {
   template = "${file("${path.module}/scripts/user-data.sh.tmpl")}"
 
   vars = {
+    environment     = var.environment
+    partner_resid   = var.partner_resid
     hostname        = local.hostname
     target_ip       = var.target_ip
     target_port     = var.target_service_port
     vnc_password    = "password"
     desktop_enabled = var.desktop_enabled
+    datadog_enabled = var.datadog_enabled
     ssm_ssl_path    = var.ssm_ssl_path
   }
 }

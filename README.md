@@ -64,7 +64,9 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_ami_version_filter"></a> [ami\_version\_filter](#input\_ami\_version\_filter) | The filter for locating the ami to run (e.g.  reverse-proxy2-<VERSION>) | `string` | `"master-*"` | no |
+| <a name="input_datadog_enabled"></a> [datadog\_enabled](#input\_datadog\_enabled) | Enable/Disable Datadog agent | `bool` | `false` | no |
 | <a name="input_desktop_enabled"></a> [desktop\_enabled](#input\_desktop\_enabled) | This will enabled the proxy config to use Gucamole -> VNC -> Desktop presentation layer | `bool` | `false` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment | `string` | n/a | yes |
 | <a name="input_instance_domain"></a> [instance\_domain](#input\_instance\_domain) | The actual name of the domain, ie e.exams.com. | `any` | n/a | yes |
 | <a name="input_instance_domain_zone_id"></a> [instance\_domain\_zone\_id](#input\_instance\_domain\_zone\_id) | The Route53 zone where a DNS entry will be created for accessing the instance. | `any` | n/a | yes |
 | <a name="input_instance_hostname"></a> [instance\_hostname](#input\_instance\_hostname) | The preferred hostname of the reverse proxy node, will have instance\_domain appeneded. | `any` | n/a | yes |
@@ -74,6 +76,7 @@ No modules.
 | <a name="input_instance_subnet_id"></a> [instance\_subnet\_id](#input\_instance\_subnet\_id) | The VPC subnet the instance will be deployed too. | `any` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | The EC2 instance type | `string` | `"t3.micro"` | no |
 | <a name="input_instance_vpc_id"></a> [instance\_vpc\_id](#input\_instance\_vpc\_id) | The VPC where the reverse proxy instance will be deployed. | `any` | n/a | yes |
+| <a name="input_partner_resid"></a> [partner\_resid](#input\_partner\_resid) | The reservation PARTNER\_RESID | `string` | n/a | yes |
 | <a name="input_ssm_ssl_path"></a> [ssm\_ssl\_path](#input\_ssm\_ssl\_path) | SSM Base path for Nginx SSL files | `string` | `"/LF/Certification/reverse-proxy/SSL"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources created by this module. | `map` | n/a | yes |
 | <a name="input_target_ip"></a> [target\_ip](#input\_target\_ip) | The IP of the node hosting the terminal or IDE where offloaded HTTP connections will be forwarded. | `any` | n/a | yes |
