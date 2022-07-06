@@ -53,6 +53,7 @@ resource "aws_instance" "default" {
   subnet_id              = var.instance_subnet_id
   iam_instance_profile   = var.instance_profile
   user_data              = data.template_file.init.rendered
+  monitoring             = var.monitoring
 
   tags = merge(var.tags, local.tags)
 }

@@ -91,3 +91,9 @@ variable "datadog_enabled" {
     type        = bool
     default     = false
 }
+
+variable "monitoring" {
+    description = "If true, the launched EC2 instance will have detailed monitoring enabled"
+    type        = bool
+    default     = false
+}

@@ -76,6 +76,7 @@ No modules.
 | <a name="input_instance_subnet_id"></a> [instance\_subnet\_id](#input\_instance\_subnet\_id) | The VPC subnet the instance will be deployed too. | `any` | n/a | yes |
 | <a name="input_instance_type"></a> [instance\_type](#input\_instance\_type) | The EC2 instance type | `string` | `"t3.micro"` | no |
 | <a name="input_instance_vpc_id"></a> [instance\_vpc\_id](#input\_instance\_vpc\_id) | The VPC where the reverse proxy instance will be deployed. | `any` | n/a | yes |
+| <a name="input_monitoring"></a> [monitoring](#input\_monitoring) | If true, the launched EC2 instance will have detailed monitoring enabled | `bool` | `false` | no |
 | <a name="input_partner_resid"></a> [partner\_resid](#input\_partner\_resid) | The reservation PARTNER\_RESID | `string` | n/a | yes |
 | <a name="input_ssm_ssl_path"></a> [ssm\_ssl\_path](#input\_ssm\_ssl\_path) | SSM Base path for Nginx SSL files | `string` | `"/LF/Certification/reverse-proxy/SSL"` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to apply to all resources created by this module. | `map` | n/a | yes |
