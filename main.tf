@@ -70,13 +70,6 @@ resource "aws_security_group" "this" {
   vpc_id      = var.instance_vpc_id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "TCP"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "TCP"
