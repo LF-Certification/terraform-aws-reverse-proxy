@@ -64,6 +64,12 @@ resource "aws_route53_record" "default" {
   type    = "A"
   ttl     = "30"
   records = [aws_instance.default.public_ip]
+  # UPSERT rather than CREATE. A provisioning task killed while waiting for
+  # the change to reach INSYNC leaves the record in Route53 but not in state;
+  # every later apply would then fail with "already exists" (2026-10-09:
+  # 16 missed exams). Overwriting re-points the leaked record at the new
+  # instance.
+  allow_overwrite = true
 }
 
 resource "aws_security_group" "this" {
